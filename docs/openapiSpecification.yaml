@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: Todo-List Manager
+  description: Sinnvolle Beschreibung
+  version: v0.1
+paths:
+  /todo-list/{list_id}:
+    get:
+      summary: Liefert alle Einträge einer Todo-Liste zurück.
+      tags: 
+        - Todo-Liste
+      parameters:
+        - name: list_id
+          in: path
+          description: UUID der Liste.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Erfolgreiche Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryList'          
+        '404':
+          description: Liste nicht gefunden
+    delete:
+      summary: Löscht eine komplette Todo-Liste mit allen Einträgen.
+      tags: 
+        - Todo-Liste
+      parameters:
+        - name: list_id
+          in: path
+          description: UUID der Liste.
+          required: true
+          schema: 
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Erfolgreiche Operation.
+        '404':
+          description: Liste nicht gefunden
+  /todo-list:
+    post:
+      summary: Fügt eine neue Todo-Liste hinzu.
+      tags: 
+        - Todo-Liste
+      requestBody:
+        description: Die Liste zum erstellen.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListWithoutId'
+        required: true
+      responses:
+        '200':
+          description: Erfolgreiche Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWithId'
+        '400':
+          description: Fehlerhafte Daten.
+        '404':
+          description: Fehlerhafte ID.
+  /todo-list/{list_id}/entry:
+    post:
+      summary: Fügt einen Eintrag zu einer bestehenden Todo-Liste hinzu.
+      tags: 
+        - Eintrag
+      parameters:
+        - name: list_id
+          in: path
+          description: ID der gewünschten Liste.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: JSON Objekt des Eintrages.
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/EntryWithoutId'
+      responses: 
+        '200':
+          description: Erfolgreiche Operation gibt JSON des Eintrages zurück.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryWithId'
+  /todo-list/{list_id}/entry/{entry_id}:
+    put:
+      summary: Aktualisiert einen bestehenden Eintrag.
+      tags: 
+        - Eintrag
+      parameters:
+        - name: list_id
+          in: path
+          description: ID der gewünschten Liste.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: entry_id
+          in: path
+          description: ID des gewünschten Eintrags.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: JSON Objekt des Eintrages.
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/EntryWithoutId'
+      responses:
+        '200':
+          description: Erfolgreiche Operation gibt JSON des Eintrages zurück.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryWithId'
+        '400':
+          description: Fehlerhafte Daten.
+        '404':
+          description: Fehlerhafte ID.
+    delete:
+      summary: Löscht einen einzelnen Eintrag aus einer Liste.
+      tags: 
+        - Eintrag
+      parameters:
+          - name: list_id
+            in: path
+            description: ID der gewünschten Liste.
+            required: true
+            schema: 
+              type: integer
+              format: int64
+          - name: entry_id
+            in: path
+            description: ID des gewünschten Eintrags
+            required: true
+            schema:
+              type: integer
+              format: int64
+      responses:
+        '200':
+          description: Erfolgreiche Operation
+        '404':
+          description: Fehlerhafte ID.
+components:
+  schemas:
+    ListWithoutId:
+      type: object
+      properties:
+        name:
+          type: string
+          example: SinvollerName
+    ListWithId:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 5
+        name:
+          type: string
+          example: SinvollerName
+    EntryWithId:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: BeispielName
+        beschreibung:
+          type: string
+          example: SinvolleBeschreibung
+    EntryWithoutId:
+      type: object
+      properties:
+        name:
+          type: string
+          example: SinvollerName
+        beschreibung:
+          type: string
+    EntryList:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntryWithId'
