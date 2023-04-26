@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Todo-List Manager
-  description: Sinnvolle Beschreibung
+  description: Todo-List Manager
   version: v0.1
 paths:
   /todo-list/{list_id}:
@@ -15,8 +15,8 @@ paths:
           description: UUID der Liste.
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         '200':
           description: Erfolgreiche Operation
@@ -36,8 +36,8 @@ paths:
           description: UUID der Liste.
           required: true
           schema: 
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         '200':
           description: Erfolgreiche Operation.
@@ -77,8 +77,8 @@ paths:
           description: ID der gewünschten Liste.
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         description: JSON Objekt des Eintrages.
         content:
@@ -103,15 +103,15 @@ paths:
           description: ID der gewünschten Liste.
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
         - name: entry_id
           in: path
           description: ID des gewünschten Eintrags.
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         description: JSON Objekt des Eintrages.
         content:
@@ -139,15 +139,15 @@ paths:
             description: ID der gewünschten Liste.
             required: true
             schema: 
-              type: integer
-              format: int64
+              type: string
+              format: uuid
           - name: entry_id
             in: path
             description: ID des gewünschten Eintrags
             required: true
             schema:
-              type: integer
-              format: int64
+              type: string
+              format: uuid
       responses:
         '200':
           description: Erfolgreiche Operation
@@ -165,9 +165,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 5
+          type: string
+          format: uuid
+          example: c360824e-9fb1-48b4-9e87-b9faa8f6d9ce
         name:
           type: string
           example: SinvollerName
@@ -175,9 +175,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: c360824e-9fb1-48b4-9e87-b9faa8f6d9ce
         name:
           type: string
           example: BeispielName
